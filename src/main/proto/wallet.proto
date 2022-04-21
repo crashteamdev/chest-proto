@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+package chest.wallet;
+
+import "google/protobuf/timestamp.proto";
+
+option java_package = "dev.crashteam.chest.wallet";
+option java_outer_classname = "ChestWalletProto";
+option java_multiple_files = true;
+
+enum WalletBlocking {
+  UNBLOCKED = 0;
+  BLOCKED = 1;
+}
+
+message WalletBalance {
+  int64 amount = 1;
+}
+
+message Wallet {
+  string wallet_id = 1;
+  Account account = 2;
+  google.protobuf.Timestamp created_at = 3;
+  WalletBlocking blocking = 4;
+  WalletBalance balance = 5;
+}
+
+message Account {
+  string user_id = 1;
+}
+
+message WalletHistory {
+  int64 amount = 1;
+  string description = 2;
+  google.protobuf.Timestamp occurred_at = 3;
+  enum HistoryType {
+    REPLENISHMENT = 0;
+    WITHDRAWAL = 1;
+  }
+  HistoryType history_type = 4;
+}
+
+message AccountCreateRequest {
+  string user_id = 1;
+}
+
+message WalletCreateRequest {
+  AccountCreateRequest account = 1;
+}
+
+message WalletCreateResponse {
+  Wallet wallet = 1;
+  Account account = 2;
+}
+
+message WalletGetRequest {
+  oneof ref_id {
+    string user_id = 1;
+    string wallet_id = 2;
+  }
+}
+
+message WalletGetResponse {
+  Wallet wallet = 1;
+}
+
+message WalletWithdrawalFundsRequest {
+  string wallet_id = 1;
+  int64 amount = 2;
+  string description = 3;
+  map<string, string> context = 4;
+}
+
+message WalletWithdrawalFundsResponse {
+  string wallet_id = 1;
+  int64 amount = 2;
+}
+
+message WalletHistoryRequest {
+  message DateFilter {
+    google.protobuf.Timestamp from_date = 1;
+    google.protobuf.Timestamp to_date = 2;
+  }
+  string wallet_id = 1;
+  DateFilter date_filter = 2;
+  string continuation_token = 3;
+  int32 limit = 4;
+}
+
+message WalletHistoryResponse {
+  string wallet_id = 1;
+  repeated WalletHistory wallet_history = 2;
+  string continuation_token = 3;
+}
+
+service WalletService {
+  rpc CreateWallet(WalletCreateRequest) returns (WalletCreateResponse);
+
+  rpc GetWallet(WalletGetRequest) returns (WalletGetResponse);
+
+  rpc WithdrawalFunds(WalletWithdrawalFundsRequest) returns (WalletWithdrawalFundsResponse);
+
+  rpc GetWalletChangeHistory(WalletHistoryRequest) returns (WalletHistoryResponse);
+}
