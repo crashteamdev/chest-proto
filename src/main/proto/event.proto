@@ -13,6 +13,7 @@ message WalletChange {
   oneof change {
       WalletCreated wallet_created = 2;
       WalletBalanceChange wallet_withdrawal_change = 3;
+      WalletBlockChange wallet_blocked = 4;
   }
 }
 
@@ -28,6 +29,14 @@ message WalletBalanceChange {
       withdrawal = 1;
   }
   BalanceChangeType type = 2;
+}
+
+message WalletBlockChange {
+  enum BlockType {
+    UNBLOCKED = 0;
+    BLOCKED = 1;
+  }
+  BlockType type = 1;
 }
 
 message WalletEvent {
