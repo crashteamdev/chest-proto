@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package chest.event;
+
+import "google/protobuf/timestamp.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "ChestEventProto";
+option java_package = "dev.crashteam.chest.event";
+
+message WalletChange {
+  string user_id = 1;
+  oneof change {
+      WalletCreated wallet_created = 2;
+      WalletBalanceChange wallet_withdrawal_change = 3;
+  }
+}
+
+message WalletCreated {
+  google.protobuf.Timestamp created_at = 1;
+  int64 balance = 2;
+}
+
+message WalletBalanceChange {
+  int64 amount = 1;
+  enum BalanceChangeType {
+      replenishment = 0;
+      withdrawal = 1;
+  }
+  BalanceChangeType type = 2;
+}
+
+message WalletEvent {
+  string event_id = 1;
+  google.protobuf.Timestamp created_at = 10;
+  message EventSource {
+    oneof source {
+      string wallet_id = 1;
+    }
+  }
+  message EventPayload {
+    oneof payload {
+      WalletChange subscription_change = 1;
+    }
+  }
+  EventPayload payload = 12;
+}
