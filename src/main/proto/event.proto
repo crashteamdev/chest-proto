@@ -38,6 +38,7 @@ message WalletEvent {
       string wallet_id = 1;
     }
   }
+  EventSource event_source = 11;
   message EventPayload {
     oneof payload {
       WalletChange wallet_change = 1;
