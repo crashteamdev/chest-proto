@@ -40,7 +40,7 @@ message WalletEvent {
   }
   message EventPayload {
     oneof payload {
-      WalletChange subscription_change = 1;
+      WalletChange wallet_change = 1;
     }
   }
   EventPayload payload = 12;
