@@ -12,7 +12,7 @@ message WalletChange {
   string user_id = 1;
   oneof change {
       WalletCreated wallet_created = 2;
-      WalletBalanceChange wallet_withdrawal_change = 3;
+      WalletBalanceChange wallet_balance_change = 3;
       WalletBlockChange wallet_blocked = 4;
   }
 }
