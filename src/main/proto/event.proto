@@ -8,6 +8,69 @@ option java_multiple_files = true;
 option java_outer_classname = "ChestEventProto";
 option java_package = "dev.crashteam.chest.event";
 
+// Business event
+message WalletReserveCredit {
+  string user_id = 1;
+  string trx_id = 2;
+  int64 amount = 3;
+  string description = 4;
+}
+
+message WalletCreditReserved {
+  string user_id = 1;
+  string trx_id = 2;
+  int64 reserved_amount = 3;
+  int64 balance = 4;
+}
+
+message WalletCreditLimitExceeded {
+  string user_id = 1;
+  string trx_id = 3;
+  int64 balance = 4;
+}
+
+message WalletUserNotFound {
+  string user_id = 1;
+  string trx_id = 2;
+}
+
+message WalletCommandEvent {
+  string event_id = 1;
+  google.protobuf.Timestamp created_at = 10;
+  message EventSource {
+    oneof source {
+      string wallet_id = 1;
+    }
+  }
+  EventSource event_source = 11;
+  message EventPayload {
+    oneof payload {
+      WalletReserveCredit wallet_change = 1;
+    }
+  }
+  EventPayload payload = 12;
+}
+
+message WalletReplyEvent {
+  string event_id = 1;
+  google.protobuf.Timestamp created_at = 10;
+  message EventSource {
+    oneof source {
+      string wallet_id = 1;
+    }
+  }
+  EventSource event_source = 11;
+  message EventPayload {
+    oneof payload {
+      WalletCreditReserved wallet_change = 1;
+      WalletCreditLimitExceeded wallet_credit_limit_exceeded = 2;
+      WalletUserNotFound wallet_user_not_found = 3;
+    }
+  }
+  EventPayload payload = 12;
+}
+
+// CUD event
 message WalletChange {
   string user_id = 1;
   oneof change {
@@ -39,7 +102,7 @@ message WalletBlockChange {
   BlockType type = 1;
 }
 
-message WalletEvent {
+message WalletCudEvent {
   string event_id = 1;
   google.protobuf.Timestamp created_at = 10;
   message EventSource {
