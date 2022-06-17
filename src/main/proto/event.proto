@@ -45,7 +45,7 @@ message WalletCommandEvent {
   EventSource event_source = 11;
   message EventPayload {
     oneof payload {
-      WalletReserveCredit wallet_change = 1;
+      WalletReserveCredit wallet_reserve_credit = 1;
     }
   }
   EventPayload payload = 12;
@@ -62,7 +62,7 @@ message WalletReplyEvent {
   EventSource event_source = 11;
   message EventPayload {
     oneof payload {
-      WalletCreditReserved wallet_change = 1;
+      WalletCreditReserved wallet_credit_reserved = 1;
       WalletCreditLimitExceeded wallet_credit_limit_exceeded = 2;
       WalletUserNotFound wallet_user_not_found = 3;
     }
