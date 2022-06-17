@@ -57,6 +57,7 @@ message WalletReplyEvent {
   message EventSource {
     oneof source {
       string wallet_id = 1;
+      string user_id = 2;
     }
   }
   EventSource event_source = 11;
